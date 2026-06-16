@@ -1,23 +1,24 @@
-# 源流 WPS智能助手 BYOK版
+# 源流 WPS 智能助手 BYOK 版
 
-**Sourceflower WPS Assistant** · v1.0.6 BYOK 纯净版
+**Sourceflower WPS AI Assistant** · v1.0.6 BYOK Edition
+
+> 🏆 *Codex for Open Source applicant — bridging AI into China's 500M+ WPS Office ecosystem.*
 
 轻量 WPS AI 助手：用户自行配置 [DeepSeek](https://www.deepseek.com/) API Key 后即可在 WPS 中对选中文本进行润色、总结、纠错等操作。本项目也是源流数字垂直领域 AI 工具的开发样板，便于参考 WPS 加载项与 BYOK 接入方式。
 
-仓库地址：[https://github.com/SourceFlowDigital/sourceflower-wps-assistant](https://github.com/SourceFlowDigital/sourceflower-wps-assistant)
+仓库地址：https://github.com/SourceFlowDigital/sourceflower-wps-assistant
 
 ---
 
-## 项目简介
+## 项目定位
 
-源流 WPS智能助手 BYOK版是一款运行在 **WPS Office** 中的文档 AI 辅助插件。您在本机填写并保存自己的 **DeepSeek API Key** 后，即可对当前文档中的选中内容使用快捷能力或自由提问。
+WPS Office 在中国拥有 **超过 5 亿用户**，但其 AI 插件生态几乎空白——Microsoft Office 有丰富的开源 AI 插件，而 WPS 开发者社区鲜有可参考的开源实现。本项目填补了这一空白：
 
-- **BYOK（Bring Your Own Key）**：插件不内置 AI 模型额度，不代充值、不代扣费；调用费用由 DeepSeek 按您的账号计费。
-- **本地保存**：API Key 仅保存在本机 WPS 插件环境中，不会上传至源流数字服务器。
-- **适用场景**：合同与政策类文稿润色、纪要总结、错别字与病句纠错、段落扩写与改写等日常办公写作辅助。
-- **项目定位**：轻量 WPS AI 助手 / 开源参考样板 / 源流数字垂直 AI 工具能力展示入口。
+- **面向普通用户**：一键安装，填入自己的 DeepSeek API Key 即可在 WPS 中使用 AI，无需编程
+- **面向开发者**：提供完整的 WPS 加载项开发参考样板（BYOK 架构、本地安全存储、Ribbon UI 集成）
+- **面向生态**：推动 WPS 办公场景下开源 AI 工具的普及，降低用户对海外闭源 AI 服务的依赖
 
-如需 **安装包与基础使用支持**，口径为：**源流 WPS智能助手 BYOK版安装包与基础使用支持：¥29.9**（以插件设置页或发布渠道说明为准）。
+由 **宁夏源流数字** 开源发布（Apache 2.0），持续维护。
 
 ---
 
@@ -30,12 +31,46 @@
 | 错别字 / 病句纠错 | 修正明显错误；无问题时不会用占位句敷衍 |
 | 内容扩写 | 在选中内容基础上延展 |
 | 内容改写 | 换种说法重写选中内容 |
+| 续写 | 基于选中内容继续生成 |
+| 缩写 | 精简文本 |
+| 中英翻译 | 选中中文翻译为英文，反之亦然 |
+| 语气转换 | 在正式、口语、商务等语气间切换 |
 | 自定义回复长度 | 主界面可设字数上限，默认 300；留空或填 0 表示不限制 |
 | 自填 DeepSeek API Key | 设置页保存后即可使用 |
-| 本地保存 API Key | 仅存本机插件环境 |
+| 本地保存 API Key | **仅存本机插件环境，不上传任何服务器** |
 | WPS 插件形态 | 顶部「源流WPS助手」选项卡，选中文字后一键处理 |
 
-此外还提供续写、缩写、摘要、中英翻译、语气转换等快捷能力（以插件界面为准）。
+---
+
+## 适用场景
+
+- 合同与政策类文稿**润色校对**
+- 会议纪要**总结提炼**
+- 错别字与病句**自动纠错**
+- 段落扩写与改写
+- 中英文快速互译
+- 日常办公写作辅助
+
+---
+
+## 技术架构
+
+```
+WPS 加载项工程
+├── manifest.xml          ← WPS 加载项注册清单
+├── ribbon.xml            ← WPS 顶部选项卡 UI 定义
+├── index.html            ← 插件主面板 UI
+├── js/                   ← 业务逻辑（任务窗格通信）
+├── ui/                   ← 设置界面
+├── main.js               ← 入口
+├── vite.config.js        ← 构建配置
+└── release/              ← 打包后的安装包
+```
+
+- **BYOK 架构**：插件不含任何内置 AI 额度，API Key 仅存本机，请求直连 DeepSeek
+- **隐私优先**：零服务器依赖，无数据采集，无埋点
+- **构建工具**：Vite
+- **安装方式**：一键 `install.bat`（含 WPS 注册表写入、加载项路径注册）
 
 ---
 
@@ -75,9 +110,9 @@
 
 - API Key 需您自行在 **DeepSeek 官方平台** 申请；插件 **不提供**、**不销售** API Key。
 - 插件 **不包含** DeepSeek 模型额度；所有 AI 请求由插件在联网状态下 **直连 DeepSeek**。
-- **调用费用**由 DeepSeek 按您的账号规则计费，请自行关注余额与用量。
+- **调用费用** 由 DeepSeek 按您的账号规则计费，请自行关注余额与用量。
 - API Key **仅保存在本机** 插件环境中，请勿向他人泄露；更换电脑需在新环境重新配置。
-- 获取入口：[https://platform.deepseek.com/api_keys](https://platform.deepseek.com/api_keys)
+- 获取入口：https://platform.deepseek.com/api_keys
 
 ---
 
@@ -117,26 +152,6 @@ AI 输出仅供参考，可能存在遗漏或错误。重要合同、政策、�
 
 ---
 
-## 免责声明
-
-- 本插件及 AI 生成内容 **仅供参考**，不构成法律、财务、投资、医疗或其他 **专业建议**。
-- 用户应 **自行判断并核验** 所有输出内容，对采用 AI 结果后的后果自行负责。
-- **DeepSeek API 调用费用** 由用户自行承担；请妥善保管 API Key，因泄露或误用产生的费用与风险由用户自行承担。
-- 源流数字不对第三方模型服务的可用性、价格变更或内容准确性作担保。
-
----
-
-## 关于源流数字
-
-源流数字承接中小企业与个人 **垂直领域 AI 工具开发**，包括小程序、Web 工具、WPS / Office 插件、文档自动化、行业问答助手、测算工具等。
-
-**主打低成本、快验证、能落地。**
-
-- 技术支持 / 商务咨询：请通过购买或使用支持渠道联系（安装包支持口径：¥29.9）
-- 作者联系（插件内展示）：润源 · sourceflowdigital@gmail.com
-
----
-
 ## 开发与构建（可选）
 
 本仓库为 WPS 加载项前端工程。开发者可在克隆仓库后执行：
@@ -150,6 +165,46 @@ npm run build
 
 ---
 
+## 贡献指南
+
+欢迎提交 Issue 和 PR。贡献方向包括但不限于：
+
+- 🐛 Bug 修复
+- ✨ 新功能（更多 AI 模型支持、批量处理等）
+- 📝 文档改进（安装说明、开发文档）
+- 🌍 国际化（英文 UI 支持）
+- 🔌 多模型适配（通义千问、文心一言等）
+
+---
+
+## 免责声明
+
+- 本插件及 AI 生成内容 **仅供参考**，不构成法律、财务、投资、医疗或其他 **专业建议**。
+- 用户应 **自行判断并核验** 所有输出内容，对采用 AI 结果后的后果自行负责。
+- **DeepSeek API 调用费用** 由用户自行承担；请妥善保管 API Key，因泄露或误用产生的费用与风险由用户自行承担。
+- 源流数字不对第三方模型服务的可用性、价格变更或内容准确性作担保。
+
+---
+
+## 许可证
+
+Apache 2.0 © 2026 SourceFlowDigital · 宁夏源流数字服务有限公司
+
+---
+
+## 关于我们
+
+[宁夏源流数字服务有限公司](https://sourceflower.com) 承接中小企业与个人 **垂直领域 AI 工具开发**，包括小程序、Web 工具、WPS / Office 插件、文档自动化、行业问答助手、测算工具等。
+
+**主打低成本、快验证、能落地。**
+
+- 官网：[sourceflower.com](https://sourceflower.com)
+- GitHub：[github.com/SourceFlowDigital](https://github.com/SourceFlowDigital)
+- 技术支持：sourceflowdigital@gmail.com
+- 作者：润源
+
+---
+
 ## 版本说明
 
-当前对外口径：**v1.0.6 BYOK 纯净版** — 无插件内激活、无官方试用额度、无内置 AI 额度；用户自填 DeepSeek API Key 后使用。
+当前版本：**v1.0.6 BYOK 纯净版** — 无插件内激活、无官方试用额度、无内置 AI 额度；用户自填 DeepSeek API Key 后使用。
